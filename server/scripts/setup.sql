@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS "time_entry" (
     "entry_date" DATE NOT NULL,
     "duration" INTERVAL NOT NULL,
     "comment" VARCHAR(255) NOT NULL,
+    "approved" BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY ("task_id") REFERENCES "tasks" ("id"),
     FOREIGN KEY ("user_id") REFERENCES "user" ("id")
 );
