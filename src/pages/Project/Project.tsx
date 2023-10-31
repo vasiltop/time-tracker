@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 export default function Project() {
 	const { id } = useParams<{ id: string }>();
 
-	const { isLoading, data } = useQuery('projectData', () =>
+	const { isLoading, data } = useQuery('project', () =>
 		fetch(`http://localhost:8000/project/${id}`, {
 			headers: {
 				'x-user-id': '1',

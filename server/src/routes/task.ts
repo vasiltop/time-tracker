@@ -24,7 +24,6 @@ router.get('/:id', async (req, res) => {
 
 		return res.send({ tasks, entries, success: true });
 	} catch (e) {
-		console.log(e);
 		if (e instanceof DatabaseError) {
 			return res.status(409).send({ success: false });
 		}

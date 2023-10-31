@@ -3,6 +3,8 @@ import { pool } from './database';
 import cors from 'cors';
 import entryRoute from './routes/entry';
 import projectRoute from './routes/project';
+import taskRoute from './routes/task';
+
 async function main() {
 	await pool.connect();
 	console.log('Connected to database.');
@@ -14,6 +16,7 @@ async function main() {
 	app.use(cors());
 	app.use('/entry', entryRoute);
 	app.use('/project', projectRoute);
+	app.use('/task', taskRoute);
 
 	app.listen(port, () => {
 		console.log(`Server listening on port ${port}`);

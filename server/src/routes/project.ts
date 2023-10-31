@@ -17,7 +17,6 @@ router.get('/', async (req, res) => {
 		return res.send({ projects: rows, success: true });
 	} catch (e) {
 		if (e instanceof DatabaseError) {
-			console.log(e);
 			return res.status(409).send({ success: false });
 		}
 		return res.status(500).send({ success: false });
@@ -43,7 +42,6 @@ router.get('/:id', async (req, res) => {
 
 		return res.send({ tasks, entries, success: true });
 	} catch (e) {
-		console.log(e);
 		if (e instanceof DatabaseError) {
 			return res.status(409).send({ success: false });
 		}

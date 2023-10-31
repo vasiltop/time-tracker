@@ -18,7 +18,7 @@ export default function Home() {
 	});
 	*/
 
-	const { isLoading, data } = useQuery('projectData', () =>
+	const { isLoading, data } = useQuery('projects', () =>
 		fetch('http://localhost:8000/project').then((res) => res.json())
 	);
 
