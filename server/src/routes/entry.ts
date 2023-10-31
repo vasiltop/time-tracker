@@ -11,7 +11,7 @@ const entrySchema = z.object({
 		taskId: z.number().int().nonnegative(),
 		userId: z.number().int().nonnegative(),
 		entryDate: z.string(),
-		duration: z.string(),
+		duration: z.number().int().nonnegative(),
 		comment: z.string().min(1).max(255),
 	}),
 });
@@ -45,6 +45,7 @@ router.post('/create', validate(entrySchema), async (req, res) => {
 		if (e instanceof DatabaseError) {
 			return res.status(409).send({ success: false });
 		}
+		return res.status(500).send({ success: false });
 	}
 });
 
@@ -52,24 +53,17 @@ router.post('/update/:id', async (req, res) => {
 	//Update time entry
 });
 
-router.get('/project/:id', async (req, res) => {
+router.get('/', async (req, res) => {
+	//check if user is an admin
 	try {
-		const projectId = req.params.id;
-		const { rows } = await pool.query(
-			'SELECT * FROM time_entry WHERE project_id = $1',
-			[projectId]
-		);
-
+		const { rows } = await pool.query('SELECT * FROM time_entry');
 		return res.send({ entries: rows, success: true });
 	} catch (e) {
 		if (e instanceof DatabaseError) {
 			return res.status(409).send({ success: false });
 		}
+		return res.status(500).send({ success: false });
 	}
-});
-
-router.get('/', async (req, res) => {
-	//Get all time entries if user is an admin
 });
 
 export default router;

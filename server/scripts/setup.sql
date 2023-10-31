@@ -1,19 +1,19 @@
-CREATE TABLE IF NOT EXISTS "projects"  (
+CREATE TABLE IF NOT EXISTS "project"  (
     "id" SERIAL PRIMARY KEY,
     "name" VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "tasks"  (
+CREATE TABLE IF NOT EXISTS "task"  (
     "id" SERIAL PRIMARY KEY,
     "name" VARCHAR(255) NOT NULL,
     "project_id" INTEGER NOT NULL,
-    FOREIGN KEY ("project_id") REFERENCES "projects" ("id")
+    FOREIGN KEY ("project_id") REFERENCES "project" ("id")
     
 );
 
 CREATE TABLE IF NOT EXISTS "user" (
     "id" SERIAL PRIMARY KEY,
-    "role" VARCHAR(255) NOT NULL
+    "admin" BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS "time_entry" (
@@ -21,10 +21,10 @@ CREATE TABLE IF NOT EXISTS "time_entry" (
     "task_id" INTEGER NOT NULL,
     "user_id" INTEGER NOT NULL,
     "entry_date" DATE NOT NULL,
-    "duration" INTERVAL NOT NULL,
+    "duration" INTEGER NOT NULL,
     "comment" VARCHAR(255) NOT NULL,
     "approved" BOOLEAN NOT NULL DEFAULT FALSE,
-    FOREIGN KEY ("task_id") REFERENCES "tasks" ("id"),
+    FOREIGN KEY ("task_id") REFERENCES "task" ("id"),
     FOREIGN KEY ("user_id") REFERENCES "user" ("id")
 );
 

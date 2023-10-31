@@ -1,3 +1,6 @@
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+
 export default function Home() {
 	/*
 	fetch('http://localhost:8000/entry/create', {
@@ -15,5 +18,21 @@ export default function Home() {
 	});
 	*/
 
-	return <> Test </>;
+	const { isLoading, data } = useQuery('projectData', () =>
+		fetch('http://localhost:8000/project').then((res) => res.json())
+	);
+
+	if (isLoading) return <> Loading... </>;
+
+	return (
+		<>
+			{data.projects.map((project: any) => {
+				return (
+					<div key={project.id}>
+						<Link to={`/project/${project.id}`}>{project.name}</Link>
+					</div>
+				);
+			})}
+		</>
+	);
 }
