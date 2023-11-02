@@ -9,38 +9,28 @@ const router = Router();
 const entrySchema = z.object({
 	body: z.object({
 		taskId: z.number().int().nonnegative(),
-		userId: z.number().int().nonnegative(),
-		entryDate: z.string(),
+		date: z.string(),
 		duration: z.number().int().nonnegative(),
 		comment: z.string().min(1).max(255),
 	}),
 });
 
-/*
-
-params: z.preprocess(
-		(n) => parseInt(z.string().parse(n), 10),
-		z.number().int().positive()
-	),
-
-	*/
-
 router.post('/create', validate(entrySchema), async (req, res) => {
 	//Create new time entry
 
 	try {
-		await pool.query(
-			'INSERT INTO time_entry (task_id, user_id, entry_date, duration, comment) VALUES ($1, $2, $3, $4, $5)',
+		const { rows } = await pool.query(
+			'INSERT INTO time_entry (task_id, user_id, entry_date, duration, comment) VALUES ($1, $2, $3, $4, $5) RETURNING *',
 			[
 				req.body.taskId,
-				req.body.userId,
-				req.body.entryDate,
+				req.headers['x-user-id'],
+				req.body.date,
 				req.body.duration,
 				req.body.comment,
 			]
 		);
 
-		res.send({ success: true });
+		res.send({ success: true, entry: rows[0] });
 	} catch (e) {
 		if (e instanceof DatabaseError) {
 			return res.status(409).send({ success: false });
