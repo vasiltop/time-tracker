@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import TimeEntry from '../../components/TimeEntry/TimeEntry';
 export default function Project() {
 	const { id } = useParams<{ id: string }>();
 
@@ -22,6 +23,10 @@ export default function Project() {
 						<Link to={`/task/${task.id}`}>{task.name}</Link>
 					</div>
 				);
+			})}
+
+			{data.entries.map((entry: any) => {
+				return <TimeEntry key={entry.id} entryData={entry} />;
 			})}
 		</>
 	);

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
+import TimeEntry from '../../components/TimeEntry/TimeEntry';
 
 type Entry = {
 	taskId: number;
@@ -24,9 +25,7 @@ export default function Task() {
 		return data;
 	});
 
-	const onSubmit: React.FormEventHandler<HTMLFormElement> = async (
-		e: React.FormEvent<HTMLFormElement>
-	) => {
+	async function createEntry(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		const form = e.target as HTMLFormElement;
 		const formData = new FormData(form);
@@ -40,7 +39,7 @@ export default function Task() {
 			comment: formData.get('comment') as string,
 		};
 
-		const response = await fetch(`http://localhost:8000/entry/create`, {
+		const response = await fetch(`http://localhost:8000/entry`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -54,7 +53,7 @@ export default function Task() {
 		if (json.success) {
 			setEntries([...entries, json.entry]);
 		}
-	};
+	}
 
 	if (isLoading) {
 		return <p>Loading...</p>;
@@ -72,12 +71,12 @@ export default function Task() {
 			{entries.map((entry: any) => {
 				return (
 					<div key={entry.id}>
-						<h3>{entry.comment}</h3>
+						<TimeEntry entryData={entry} />
 					</div>
 				);
 			})}
-			<form onSubmit={onSubmit}>
-				<h1> Submit an entry.</h1>
+			<form onSubmit={createEntry}>
+				<h1> Submit an entry:</h1>
 				<h3>Date</h3>
 				<input type="date" name="date" required></input>
 

@@ -15,7 +15,7 @@ const entrySchema = z.object({
 	}),
 });
 
-router.post('/create', validate(entrySchema), async (req, res) => {
+router.post('/', validate(entrySchema), async (req, res) => {
 	//Create new time entry
 
 	try {
@@ -40,7 +40,19 @@ router.post('/create', validate(entrySchema), async (req, res) => {
 });
 
 router.post('/update/:id', async (req, res) => {
-	//Update time entry
+	try {
+		const { rows } = await pool.query(
+			'UPDATE time_entry SET entry_date = $1, duration = $2, comment = $3 WHERE id = $4 AND approved = FALSE RETURNING *',
+			[req.body.date, req.body.duration, req.body.comment, req.params.id]
+		);
+
+		res.send({ success: true, entry: rows[0] });
+	} catch (e) {
+		if (e instanceof DatabaseError) {
+			return res.status(409).send({ success: false });
+		}
+		return res.status(500).send({ success: false });
+	}
 });
 
 router.get('/', async (req, res) => {
