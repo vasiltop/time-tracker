@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
 export default function ({ entryData }: any) {
-	console.log(entryData);
 	const [date, setDate] = useState(entryData.entry_date);
-	const [hours, setHours] = useState(entryData.duration / 60);
-	const [minutes, setMinutes] = useState(entryData.duration % 60);
+	const [hours, setHours] = useState(Math.floor(entryData.duration / 60));
+	const [minutes, setMinutes] = useState(Math.floor(entryData.duration % 60));
 	const [comment, setComment] = useState(entryData.comment);
 
 	async function updateEntry(e: React.FormEvent<HTMLFormElement>) {
@@ -37,8 +36,8 @@ export default function ({ entryData }: any) {
 
 		if (json.success) {
 			setDate(json.entry.entry_date);
-			setHours(json.entry.duration / 60);
-			setMinutes(json.entry.duration % 60);
+			setHours(Math.floor(json.entry.duration / 60));
+			setMinutes(Math.floor(json.entry.duration % 60));
 			setComment(json.entry.comment);
 		}
 	}

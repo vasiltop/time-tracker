@@ -5,8 +5,6 @@ import { pool } from '../database';
 const router = Router();
 
 router.get('/:id', async (req, res) => {
-	res.appendHeader('Cache-Control', 'no-cache, no-store');
-
 	try {
 		const taskId = req.params.id;
 

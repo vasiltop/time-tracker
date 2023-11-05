@@ -13,8 +13,13 @@ const projectSchema = z.object({
 
 router.get('/', async (req, res) => {
 	try {
-		const { rows } = await pool.query('SELECT * FROM project');
-		return res.send({ projects: rows, success: true });
+		const { rows: projects } = await pool.query('SELECT * FROM project');
+
+		const { rows: entries } = await pool.query(
+			'SELECT * FROM time_entry WHERE user_id = $1',
+			[req.headers['x-user-id']]
+		);
+		return res.send({ projects: projects, entries: entries, success: true });
 	} catch (e) {
 		if (e instanceof DatabaseError) {
 			return res.status(409).send({ success: false });
@@ -23,8 +28,6 @@ router.get('/', async (req, res) => {
 	}
 });
 router.get('/:id', async (req, res) => {
-	res.appendHeader('Cache-Control', 'no-cache, no-store');
-
 	try {
 		const projectId = req.params.id;
 
