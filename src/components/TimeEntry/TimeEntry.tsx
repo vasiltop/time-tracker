@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import type { Entry } from '../../types';
 
-export default function ({ entryData }: any) {
-	const [date, setDate] = useState(entryData.entry_date);
-	const [hours, setHours] = useState(Math.floor(entryData.duration / 60));
-	const [minutes, setMinutes] = useState(Math.floor(entryData.duration % 60));
-	const [comment, setComment] = useState(entryData.comment);
+type TimeEntryProps = {
+	entryData: Entry;
+	editable: boolean;
+};
+
+export default function ({ entryData, editable }: TimeEntryProps) {
+	const [tip, setTip] = useState('');
 
 	async function updateEntry(e: React.FormEvent<HTMLFormElement>) {
 		if (entryData.approved) return;
@@ -35,26 +38,29 @@ export default function ({ entryData }: any) {
 		const json = await response.json();
 
 		if (json.success) {
-			setDate(json.entry.entry_date);
-			setHours(Math.floor(json.entry.duration / 60));
-			setMinutes(Math.floor(json.entry.duration % 60));
-			setComment(json.entry.comment);
+			setTip('Entry updated successfully');
+		} else {
+			setTip('Entry update failed');
 		}
 	}
 
 	return (
 		<>
-			<form onSubmit={updateEntry}>
-				<h3>Date</h3>
+			<form
+				onSubmit={updateEntry}
+				className="card w-96 bg-base-300 shadow-xl p-4 flex flex-col gap-2"
+			>
+				<h2 className=" text-lg font-medium">Date </h2>
 				<input
 					type="date"
 					name="date"
-					defaultValue={date.slice(0, 10)}
-					disabled={entryData.approved}
+					className="input input-bordered"
+					defaultValue={entryData.date.slice(0, 10)}
+					disabled={!editable}
 					required
 				></input>
 
-				<h3> Duration </h3>
+				<h2 className=" text-lg font-medium"> Duration </h2>
 
 				<h4> Hours </h4>
 				<input
@@ -62,8 +68,9 @@ export default function ({ entryData }: any) {
 					name="hours"
 					min="0"
 					max="23"
-					defaultValue={hours}
-					disabled={entryData.approved}
+					className="input input-bordered"
+					defaultValue={Math.floor(entryData.duration / 60)}
+					disabled={!editable}
 					required
 				></input>
 
@@ -73,21 +80,36 @@ export default function ({ entryData }: any) {
 					name="minutes"
 					min="0"
 					max="59"
-					defaultValue={minutes}
-					disabled={entryData.approved}
+					className="input input-bordered"
+					defaultValue={Math.floor(entryData.duration % 60)}
+					disabled={!editable}
 					required
 				></input>
 
-				<h4> Comment </h4>
+				<h2 className=" text-lg font-medium">Comment </h2>
 				<input
 					type="text"
 					name="comment"
-					defaultValue={comment}
-					disabled={entryData.approved}
+					className="input input-bordered"
+					defaultValue={entryData.comment}
+					disabled={!editable}
 					required
 				></input>
 
-				{!entryData.approved && <button type="submit">Update</button>}
+				{entryData.admin_message && (
+					<div>
+						<h5>Admin Message</h5>
+						<p> {entryData.admin_message} </p>
+					</div>
+				)}
+
+				{editable && (
+					<button type="submit" className="btn">
+						Update
+					</button>
+				)}
+
+				{tip && <p className="text-sm"> {tip} </p>}
 			</form>
 		</>
 	);

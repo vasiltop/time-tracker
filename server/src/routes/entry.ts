@@ -41,8 +41,14 @@ router.post('/', validate(entrySchema), async (req, res) => {
 router.post('/update/:id', async (req, res) => {
 	try {
 		const { rows } = await pool.query(
-			'UPDATE time_entry SET date = $1, duration = $2, comment = $3 WHERE id = $4 AND approved = FALSE RETURNING *',
-			[req.body.date, req.body.duration, req.body.comment, req.params.id]
+			'UPDATE time_entry SET date = $1, duration = $2, comment = $3 WHERE id = $4 AND approved = FALSE AND user_id = $5 RETURNING *',
+			[
+				req.body.date,
+				req.body.duration,
+				req.body.comment,
+				req.params.id,
+				req.headers['x-user-id'],
+			]
 		);
 
 		res.send({ success: true, entry: rows[0] });
@@ -84,11 +90,11 @@ router.post('/approve', adminCheck, async (req, res) => {
 });
 router.post('/submit', async (req, res) => {
 	try {
-		const { rows } = await pool.query(
+		const { rows: entries } = await pool.query(
 			'UPDATE time_entry SET submitted = TRUE WHERE id = ANY($1) AND user_id = $2 AND submitted = FALSE AND approved = FALSE RETURNING *',
 			[req.body.ids, req.headers['x-user-id']]
 		);
-		return res.send({ entries: rows, success: true });
+		return res.send({ entries, success: true });
 	} catch (e) {
 		if (e instanceof DatabaseError) {
 			return res.status(409).send({ success: false });

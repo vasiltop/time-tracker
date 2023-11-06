@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import TimeEntry from '../../components/TimeEntry/TimeEntry';
+import type { Entry } from '../../types';
 
-type Entry = {
-	taskId: number;
+type CreatedEntry = {
+	task_id: number;
 	date: string;
 	duration: number;
 	comment: string;
@@ -13,6 +14,7 @@ type Entry = {
 export default function Task() {
 	const { id } = useParams<{ id: string }>();
 	const [entries, setEntries] = useState<Entry[]>([]);
+	const [tip, setTip] = useState('');
 
 	const { isLoading, data } = useQuery('task', async () => {
 		const res = await fetch(`http://localhost:8000/task/${id}`, {
@@ -20,9 +22,9 @@ export default function Task() {
 				'x-user-id': '1',
 			},
 		});
-		const data = await res.json();
-		if (data.success) setEntries(data.entries);
-		return data;
+		const json = await res.json();
+		if (json.success) setEntries(json.entries);
+		return json;
 	});
 
 	async function createEntry(e: React.FormEvent<HTMLFormElement>) {
@@ -30,8 +32,8 @@ export default function Task() {
 		const form = e.target as HTMLFormElement;
 		const formData = new FormData(form);
 
-		const entry: Entry = {
-			taskId: parseInt(id!),
+		const entry: CreatedEntry = {
+			task_id: parseInt(id!),
 			date: formData.get('date') as string,
 			duration:
 				parseInt(formData.get('hours') as string) * 60 +
@@ -52,6 +54,9 @@ export default function Task() {
 
 		if (json.success) {
 			setEntries([...entries, json.entry]);
+			setTip('Entry created successfully');
+		} else {
+			setTip('Entry creation failed');
 		}
 	}
 
@@ -61,38 +66,78 @@ export default function Task() {
 
 	return (
 		<>
-			{data.tasks.map((task: any) => {
-				return (
-					<div key={task.id}>
-						<h3>{task.name}</h3>
-					</div>
-				);
-			})}
-			{entries.map((entry: any) => {
-				return (
-					<div key={entry.id}>
-						<TimeEntry entryData={entry} />
-					</div>
-				);
-			})}
-			<form onSubmit={createEntry}>
-				<h1> Submit an entry:</h1>
-				<h3>Date</h3>
-				<input type="date" name="date" required></input>
+			<div className="flex h-32 bg-base-300 justify-center items-center p-8 gap-8">
+				<Link to="/" className="btn">
+					Home
+				</Link>
+				{data.tasks.map((task: any) => {
+					return (
+						<div key={task.id} className="btn">
+							<h3>{task.name}</h3>
+						</div>
+					);
+				})}
+			</div>
 
-				<h3> Duration </h3>
+			<form
+				onSubmit={createEntry}
+				className="flex flex-col items-center gap-2 p-4"
+			>
+				<h2 className=" text-xl font-bold">Create an Entry: </h2>
 
-				<h4> Hours </h4>
-				<input type="number" name="hours" min="0" max="23" required></input>
+				<h2 className=" text-lg font-bold">Date </h2>
+				<input
+					type="date"
+					name="date"
+					className="input input-bordered"
+					required
+				></input>
 
-				<h4> Minutes </h4>
-				<input type="number" name="minutes" min="0" max="59" required></input>
+				<h2 className=" text-lg font-bold">Duration </h2>
 
-				<h4> Comment </h4>
-				<input type="text" name="comment" required></input>
+				<h2 className=" text-lg font-medium">Hours </h2>
+				<input
+					type="number"
+					name="hours"
+					min="0"
+					className="input input-bordered"
+					max="23"
+					required
+				></input>
 
-				<button type="submit">Create</button>
+				<h2 className=" text-lg font-medium">Minutes </h2>
+				<input
+					type="number"
+					name="minutes"
+					min="0"
+					className="input input-bordered"
+					max="59"
+					required
+				></input>
+
+				<h2 className=" text-lg font-bold">Comment </h2>
+				<input
+					type="text"
+					name="comment"
+					className="input input-bordered"
+					required
+				></input>
+
+				<button type="submit" className="btn">
+					Create
+				</button>
+				{tip && <p className="text-sm">{tip}</p>}
 			</form>
+
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center gap-8 p-4">
+				{entries.map((entry: Entry) => {
+					return (
+						<div key={entry.id}>
+							<TimeEntry entryData={entry} editable={!entry.approved} />
+						</div>
+					);
+				})}
+			</div>
 		</>
 	);
 }

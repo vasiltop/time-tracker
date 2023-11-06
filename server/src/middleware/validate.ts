@@ -17,6 +17,7 @@ export default function validate(schema: z.ZodSchema) {
 					errors: e.errors,
 				});
 			}
+			return res.status(500).send({ success: false });
 		}
 	};
 }

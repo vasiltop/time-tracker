@@ -7,7 +7,6 @@ const router = Router();
 router.get('/:id', async (req, res) => {
 	try {
 		const taskId = req.params.id;
-
 		const id = req.headers['x-user-id'];
 
 		const { rows: entries } = await pool.query(
