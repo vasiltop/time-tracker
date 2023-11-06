@@ -11,7 +11,7 @@ router.get('/:id', async (req, res) => {
 		const id = req.headers['x-user-id'];
 
 		const { rows: entries } = await pool.query(
-			'SELECT * FROM time_entry WHERE task_id = $1 AND user_id = $2',
+			'SELECT * FROM time_entry WHERE task_id = $1 AND user_id = $2  ',
 			[taskId, id]
 		);
 

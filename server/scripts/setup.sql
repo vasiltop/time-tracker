@@ -20,9 +20,10 @@ CREATE TABLE IF NOT EXISTS "time_entry" (
     "id" SERIAL PRIMARY KEY,
     "task_id" INTEGER NOT NULL,
     "user_id" INTEGER NOT NULL,
-    "entry_date" DATE NOT NULL,
+    "date" DATE NOT NULL,
     "duration" INTEGER NOT NULL,
     "comment" VARCHAR(255) NOT NULL,
+    "admin_message" VARCHAR(255) NOT NULL,
     "approved" BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY ("task_id") REFERENCES "task" ("id"),
     FOREIGN KEY ("user_id") REFERENCES "user" ("id")
