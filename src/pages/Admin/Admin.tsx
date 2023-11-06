@@ -18,7 +18,6 @@ export default function Admin() {
 		const json = await response.json();
 		setEntries(json.entries);
 
-		console.log(json);
 		return json;
 	});
 
