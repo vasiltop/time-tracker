@@ -3,7 +3,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { Entry } from '../../types';
 import TimeEntry from '../../components/TimeEntry/TimeEntry';
 import { useState } from 'react';
-import { baseURL } from '../../api';
+import { baseUrl } from '../../api';
 
 export default function Admin() {
 	const [entries, setEntries] = useState<Entry[]>([]);

@@ -1,1 +1,1 @@
-export baseUrl = "timetracker-api.vasiltopalovic.com";
+export const baseUrl = "timetracker-api.vasiltopalovic.com";
