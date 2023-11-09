@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import TimeEntry from '../../components/TimeEntry/TimeEntry';
 import { Entry } from '../../types';
-mport { baseUrl } from '../../api';
+import { baseUrl } from '../../api';
 
 type Task = {
 	id: number;
