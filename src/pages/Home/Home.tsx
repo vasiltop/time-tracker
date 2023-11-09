@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import TimeEntry from '../../components/TimeEntry/TimeEntry';
 import { useState } from 'react';
 import { Entry } from '../../types';
+import { baseUrl } from '../../api';
 
 type Project = {
 	id: number;
@@ -14,7 +15,7 @@ export default function Home() {
 	const [tip, setTip] = useState('');
 
 	const { isLoading, data } = useQuery('projects', async () => {
-		const response = await fetch('http://localhost:8000/project', {
+		const response = await fetch(`${baseUrl}/project`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'x-user-id': '1',
@@ -60,7 +61,7 @@ export default function Home() {
 		const ids = entries.map((entry: Entry) => entry.id);
 
 		if (ids.length === 0) return setTip('No entries to submit');
-		const response = await fetch('http://localhost:8000/entry/submit', {
+		const response = await fetch(`${baseUrl}/entry/submit`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { Link, useParams } from 'react-router-dom';
 import TimeEntry from '../../components/TimeEntry/TimeEntry';
 import type { Entry } from '../../types';
+import { baseUrl } from '../../api';
 
 type CreatedEntry = {
 	task_id: number;
@@ -17,7 +18,7 @@ export default function Task() {
 	const [tip, setTip] = useState('');
 
 	const { isLoading, data } = useQuery('task', async () => {
-		const res = await fetch(`http://localhost:8000/task/${id}`, {
+		const res = await fetch(`${baseUrl}/task/${id}`, {
 			headers: {
 				'x-user-id': '1',
 			},
@@ -41,7 +42,7 @@ export default function Task() {
 			comment: formData.get('comment') as string,
 		};
 
-		const response = await fetch(`http://localhost:8000/entry`, {
+		const response = await fetch(`${baseUrl}/entry`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

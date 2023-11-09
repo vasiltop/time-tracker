@@ -3,12 +3,13 @@ import { Link, Navigate } from 'react-router-dom';
 import { Entry } from '../../types';
 import TimeEntry from '../../components/TimeEntry/TimeEntry';
 import { useState } from 'react';
+import { baseURL } from '../../api';
 
 export default function Admin() {
 	const [entries, setEntries] = useState<Entry[]>([]);
 
 	const { isLoading, data } = useQuery('admin', async () => {
-		const response = await fetch('http://localhost:8000/entry/submitted', {
+		const response = await fetch(`${baseUrl}/entry/submitted`, {
 			headers: {
 				'Content-Type': 'application/json',
 				'x-user-id': '2',
@@ -27,7 +28,7 @@ export default function Admin() {
 		const form = e.target as HTMLFormElement;
 		const formData = new FormData(form);
 
-		const response = await fetch('http://localhost:8000/entry/approve', {
+		const response = await fetch(`${baseUrl}/entry/approve`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
