@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import TimeEntry from '../../components/TimeEntry/TimeEntry';
 import { Entry } from '../../types';
+import { baseUrl } from '../../api';
 
 type Task = {
 	id: number;
@@ -12,7 +13,7 @@ export default function Project() {
 	const { id } = useParams<{ id: string }>();
 
 	const { isLoading, data } = useQuery('project', () =>
-		fetch(`http://localhost:8000/project/${id}`, {
+		fetch(`${baseUrl}/project/${id}`, {
 			headers: {
 				'x-user-id': '1',
 			},

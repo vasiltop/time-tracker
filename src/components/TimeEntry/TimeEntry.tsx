@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Entry } from '../../types';
+import { baseUrl } from '../../api';
 
 type TimeEntryProps = {
 	entryData: Entry;
@@ -24,7 +25,7 @@ export default function ({ entryData, editable }: TimeEntryProps) {
 		};
 
 		const response = await fetch(
-			`http://localhost:8000/entry/update/${entryData.id}`,
+			`${baseUrl}/entry/update/${entryData.id}`,
 			{
 				method: 'POST',
 				headers: {
