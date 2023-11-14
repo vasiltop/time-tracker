@@ -28,6 +28,7 @@ export default function Home() {
 	});
 
 	function toggleDateRange(toggle: boolean, entries: Entry[]) {
+		console.log(toggle);
 		if (!toggle) {
 			setEntries(
 				entries.filter((entry: Entry) => {
@@ -104,7 +105,7 @@ export default function Home() {
 					<input
 						type="checkbox"
 						className="toggle"
-						onChange={(e) => toggleDateRange(e.target.checked, entries)}
+						onChange={(e) => toggleDateRange(e.target.checked, data.entries)}
 					/>
 					Weeks
 				</div>
