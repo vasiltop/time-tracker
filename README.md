@@ -4,13 +4,20 @@ A full-stack web application for handling time submissions on projects at a comp
 
 ## Installation
 
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en/)
+- [pnpm](https://pnpm.io/)
+
 ```bash
 git clone https://github.com/vasiltop/time-tracker
 
 cd time-tracker
+pnpm install
 pnpm dev
 
 cd time-tracker/server
+pnpm install
 pnpm dev
 ```
 
