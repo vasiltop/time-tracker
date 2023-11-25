@@ -1,6 +1,6 @@
-# Employee Time Tracker
+# Time Tracker
 
-A full-stack web application for handling time submissions on projects at a company.
+A full-stack web application for handling time submissions on team projects.
 
 ## Installation
 
