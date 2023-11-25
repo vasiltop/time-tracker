@@ -27,8 +27,8 @@ A project will contain a certain amount of tasks.
 
 ## Tasks
 
-Each task in a project will contain time entries that employees can submit whenever they complete a task.
+Each task in a project will contain time entries that team members can submit whenever they complete a task.
 
 ## Time Entry
 
-Employees may submit a time entry on a certain task, which they can submit on a weekly/monthly basis. Admins can then review these entries and choose to accept/decline them with a feedback message.
+Team members may submit a time entry on a certain task, which they can submit on a weekly/monthly basis. Admins can then review these entries and choose to accept/decline them with a feedback message.
